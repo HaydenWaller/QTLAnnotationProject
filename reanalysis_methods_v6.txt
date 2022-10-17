@@ -1,0 +1,559 @@
+#################################### 	
+#### Laupala QTL Annotation Code ###
+####################################
+
+##Sample nomenclature
+
+# lkfmleam - Laupala kohalensis female sampled at 12am
+# lkfmlepm - Laupala kohalensis female sampled at 12pm
+# lkmaleam - Laupala kohalensis male sampled at 12am
+# lkmalepm - Laupala kohalensis male sampled at 12pm
+# lpfmleam - Laupala paranigra female sampled at 12am
+# lpfmlepm - Laupala paranigra female sampled at 12pm
+# lpmaleam - Laupala paranigra male sampled at 12am
+# lpmalepm - Laupala paranigra male sampled at 12pm
+
+
+1. Filter reads to remove Illumina adapters and low quality reads using TRIMMOMATIC
+
+#Generic Command
+java -jar /programs/trimmomatic/trimmomatic-0.39.jar PE -phred33 -threads 15 paired_end_reads_1.fastq paired_end_reads_2.fastq kept_paired_end_reads_1.fastq unpaired_1.fastq kept_paired_end_reads_2.fastq  unpaired_2.fastq ILLUMINACLIP:/programs/trimmomatic/adapters/TruSeq3-PE-2.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+
+#Outputs
+
+lkfmleam
+
+Input Read Pairs: 37234089
+Both Surviving Reads: 36402204
+Both Surviving Read Percent: 97.77
+Forward Only Surviving Reads: 709854
+Forward Only Surviving Read Percent: 1.91
+Reverse Only Surviving Reads: 96070
+Reverse Only Surviving Read Percent: 0.26
+Dropped Reads: 25961
+Dropped Read Percent: 0.07
+
+--------------------------------------------
+
+lkfmlepm
+
+Input Read Pairs: 43808281
+Both Surviving Reads: 42882846
+Both Surviving Read Percent: 97.89
+Forward Only Surviving Reads: 794399
+Forward Only Surviving Read Percent: 1.81
+Reverse Only Surviving Reads: 103454
+Reverse Only Surviving Read Percent: 0.24
+Dropped Reads: 27582
+Dropped Read Percent: 0.06
+
+--------------------------------------------
+
+lkmaleam
+
+Input Read Pairs: 43808281
+Both Surviving Reads: 43459818
+Both Surviving Read Percent: 99.20
+Forward Only Surviving Reads: 206261
+Forward Only Surviving Read Percent: 0.47
+Reverse Only Surviving Reads: 141514
+Reverse Only Surviving Read Percent: 0.32
+Dropped Reads: 688
+Dropped Read Percent: 0.00
+
+--------------------------------------------
+
+lkmalepm
+
+Input Read Pairs: 41253674
+Both Surviving Reads: 40222315
+Both Surviving Read Percent: 97.50
+Forward Only Surviving Reads: 884677
+Forward Only Surviving Read Percent: 2.14
+Reverse Only Surviving Reads: 111223
+Reverse Only Surviving Read Percent: 0.27
+Dropped Reads: 35459
+Dropped Read Percent: 0.09
+
+--------------------------------------------
+
+lpfmleam
+
+Input Read Pairs: 48156269
+Both Surviving Reads: 47262387
+Both Surviving Read Percent: 98.14
+Forward Only Surviving Reads: 739284
+Forward Only Surviving Read Percent: 1.54
+Reverse Only Surviving Reads: 121533
+Reverse Only Surviving Read Percent: 0.25
+Dropped Reads: 33065
+Dropped Read Percent: 0.07
+
+--------------------------------------------
+lpfmlepm
+
+Input Read Pairs: 50201013
+Both Surviving Reads: 49193618
+Both Surviving Read Percent: 97.99
+Forward Only Surviving Reads: 836489
+Forward Only Surviving Read Percent: 1.67
+Reverse Only Surviving Reads: 130457
+Reverse Only Surviving Read Percent: 0.26
+Dropped Reads: 40449
+Dropped Read Percent: 0.08
+
+--------------------------------------------
+
+lpmaleam
+
+Input Read Pairs: 44519663
+Both Surviving Reads: 43588472
+Both Surviving Read Percent: 97.91
+Forward Only Surviving Reads: 779497
+Forward Only Surviving Read Percent: 1.75
+Reverse Only Surviving Reads: 117179
+Reverse Only Surviving Read Percent: 0.26
+Dropped Reads: 34515
+Dropped Read Percent: 0.08
+
+--------------------------------------------
+
+lpmalepm
+
+Input Read Pairs: 42742749
+Both Surviving Reads: 41909304
+Both Surviving Read Percent: 98.05
+Forward Only Surviving Reads: 696044
+Forward Only Surviving Read Percent: 1.63
+Reverse Only Surviving Reads: 104931
+Reverse Only Surviving Read Percent: 0.25
+Dropped Reads: 32470
+Dropped Read Percent: 0.08
+
+##############################################################################
+
+
+
+2. Align trimmed reads to Laupala kohalensis Genome using HISAT2, collapsing 8 samples into their respective species
+
+a. build Hisat2 index
+
+##Generic Command
+hisat2-build [path to genome fasta] [index name]
+
+
+b. Align RNAseq reads
+
+##Generic Command
+hisat2 -p 20 -x [path to index] -1 [forward reads, forward reads, ...] -2 [reverse reads, reverse reads, ...] -S output_alignment.sam
+
+
+#Outputs
+
+lk
+
+172801114 reads; of these:
+  172801114 (100.00%) were paired; of these:
+    16040942 (9.28%) aligned concordantly 0 times
+    141361213 (81.81%) aligned concordantly exactly 1 time
+    15398959 (8.91%) aligned concordantly >1 times
+    ----
+    16040942 pairs aligned concordantly 0 times; of these:
+      1547290 (9.65%) aligned discordantly 1 time
+    ----
+    14493652 pairs aligned 0 times concordantly or discordantly; of these:
+      28987304 mates make up the pairs; of these:
+        18325843 (63.22%) aligned 0 times
+        9387870 (32.39%) aligned exactly 1 time
+        1273591 (4.39%) aligned >1 times
+94.70% overall alignment rate
+
+----------------------------------------------
+
+lp
+
+185619694 reads; of these:
+  185619694 (100.00%) were paired; of these:
+    21118349 (11.38%) aligned concordantly 0 times
+    148852652 (80.19%) aligned concordantly exactly 1 time
+    15648693 (8.43%) aligned concordantly >1 times
+    ----
+    21118349 pairs aligned concordantly 0 times; of these:
+      1655760 (7.84%) aligned discordantly 1 time
+    ----
+    19462589 pairs aligned 0 times concordantly or discordantly; of these:
+      38925178 mates make up the pairs; of these:
+        23713537 (60.92%) aligned 0 times
+        13375941 (34.36%) aligned exactly 1 time
+        1835700 (4.72%) aligned >1 times
+93.61% overall alignment rate
+
+
+
+##############################################################################
+
+
+
+3. Manipulate And Prepare Data For Genome-Guided De Novo Trinity Run Using SAMTOOLS
+
+a. convert .sam outputs from 2b to .bam
+
+#Generic Command
+samtools view -Sbo [output.file] [input.file]
+
+b. sort .bam files from 3a
+
+#Generic Command
+samtools sort -Sbo [output.file] [input.file]
+
+
+
+##############################################################################
+
+
+4. Genome-Guided De Novo Transcriptome Assembly Using TRINITY
+
+#Generic Command
+Trinity --genome_guided_bam [path to sorted alignment bam] --genome_guided_max_intron 5000 --max_memory 40 --CPU 80
+
+
+#Outputs
+
+a. KOHALENSIS 
+
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':	169998
+Total trinity transcripts:	211490
+Percent GC: 37.85
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+	Contig N10: 9783
+	Contig N20: 7370
+	Contig N30: 5741
+	Contig N40: 4408
+	Contig N50: 3280
+
+	Median contig length: 410
+	Average contig: 1144.45
+	Total assembled bases: 242040549
+
+
+#####################################################
+## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+#####################################################
+
+	Contig N10: 7880
+	Contig N20: 5229
+	Contig N30: 3529
+	Contig N40: 2261
+	Contig N50: 1336
+
+	Median contig length: 359
+	Average contig: 746.27
+	Total assembled bases: 126865079
+
+
+
+b. PARANIGRA
+
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':	175551
+Total trinity transcripts:	222377
+Percent GC: 37.70
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+	Contig N10: 9562
+	Contig N20: 7090
+	Contig N30: 5510
+	Contig N40: 4287
+	Contig N50: 3203
+
+	Median contig length: 419
+	Average contig: 1145.50
+	Total assembled bases: 254732707
+
+
+#####################################################
+## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+#####################################################
+
+	Contig N10: 7755
+	Contig N20: 5119
+	Contig N30: 3436
+	Contig N40: 2192
+	Contig N50: 1314
+
+	Median contig length: 367
+	Average contig: 751.45
+	Total assembled bases: 131917005
+
+
+
+
+##############################################################################
+
+4. Remove Redundant Reads From Newly-Generated Transcriptomes Using CD-HIT
+
+#KOHALENSIS
+
+/programs/cd-hit-4.8.1/cd-hit-est -i lk_Trinity.fasta -o lk_Trinity_cdhit98.fasta -c 0.98 -T 20 -M 45000
+
+#PARANIGRA
+/programs/cd-hit-4.8.1/cd-hit-est -i lp_Trinity.fasta -o lp_Trinity_cdhit98.fasta -c 0.98 -T 20 -M 45000
+
+
+##############################################################################
+
+5. Extract Longest Open Reading Frame Per 'Gene' from Each Filtered Transcriptome with TransDecoder
+
+a. Download UniProt Protein Database and Make DIAMOND BLAST Database From It
+
+wget ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+gunzip uniprot_sprot.fasta.gz
+/programs/diamond/diamond makedb --in uniprot_sprot.fasta -d uniprot_db
+
+b. Filter Transcriptomes To Retain Only The Longest Isoform Per 'Gene'
+
+/workdir/Hayden/trinityrnaseq-v2.14.0/util/misc/get_longest_isoform_seq_per_trinity_gene.pl lk_Trinity_cdhit98.fasta > lk_Trinity_cdhit98_longestiso.fasta
+/workdir/Hayden/trinityrnaseq-v2.14.0/util/misc/get_longest_isoform_seq_per_trinity_gene.pl lp_Trinity_cdhit98.fasta > lp_Trinity_cdhit98_longestiso.fasta
+
+c. Extract High Confidence BLAST-Informed Long ORFs
+
+#KOHALENSIS
+/programs/TransDecoder-v5.5.0/TransDecoder.LongOrfs -t lk_Trinity_cdhit98_longestiso.fasta
+/programs/diamond/diamond blastp --query lk_Trinity_cdhit98_longestiso.fasta.transdecoder_dir/longest_orfs.pep -d uniprot_db --out lk_Trinity_cdhit98_longestiso_blastp.outfmt6 --evalue 1e-5 --threads 20 --max-target-seqs 1 --outfmt 6
+/programs/TransDecoder-v5.5.0/TransDecoder.Predict -t lk_Trinity_cdhit98_longestiso.fasta --retain_blastp_hits lk_Trinity_cdhit98_longestiso_blastp.outfmt6
+
+#PARANIGRA
+/programs/TransDecoder-v5.5.0/TransDecoder.LongOrfs -t lp_Trinity_cdhit98_longestiso.fasta
+/programs/diamond/diamond blastp --query lp_Trinity_cdhit98_longestiso.fasta.transdecoder_dir/longest_orfs.pep -d uniprot_db --out lp_Trinity_cdhit98_longestiso_blastp.outfmt6 --evalue 1e-5 --threads 20 --max-target-seqs 1 --outfmt 6
+/programs/TransDecoder-v5.5.0/TransDecoder.Predict -t lp_Trinity_cdhit98_longestiso.fasta --retain_blastp_hits lp_Trinity_cdhit98_longestiso_blastp.outfmt6
+
+##############################################################################
+
+6. Annotation of Files Resulting From 5c
+
+a. Identify High Confidence BLAST hits | UniProt DB as Subject, Trnascriptomes as Query
+
+#KOHALENSIS
+/programs/diamond/diamond makedb --in uniprot_sprot.fasta -d uniprot_db
+/programs/diamond/diamond blastp --query lk.pep -d uniprot_db --out lk.pep_blastp.outfmt6 --evalue 1e-5 --threads 40 --max-target-seqs 1 --outfmt 6
+
+#PARANIGRA
+/programs/diamond/diamond makedb --in uniprot_sprot.fasta -d uniprot_db
+/programs/diamond/diamond blastp --query lp.cds -d uniprot_db --out lp.pep_blastp.outfmt6 --evalue 1e-5 --threads 40 --max-target-seqs 1 --outfmt 6
+
+
+b. Identify High Confidence BLAST hits | Transcriptomes as Subject, UniProt DB as Query
+
+#KOHALENSIS
+/programs/diamond/diamond makedb --in lk.cds -d lk_db
+/programs/diamond/diamond blastp --query uniprot_sprot.fasta -d lk_db --out uniprot.pep_blastp.outfmt6 --evalue 1e-5 --threads 40 --max-target-seqs 1 --outfmt 6
+
+#PARANIGRA
+/programs/diamond/diamond makedb --in lp.cds -d lp_db
+/programs/diamond/diamond blastp --query uniprot_sprot.fasta -d lp_db --out uniprot.pep_blastp.outfmt6 --evalue 1e-5 --threads 40 --max-target-seqs 1 --outfmt 6
+
+
+c. Merge To Only Retain Reciprocal Best BLAST Hits in Excel
+
+d. Use UniProt Batch Retrieve Tool To Identify GO Terms For Each Annotation
+
+#######################################################################################################################################################################################
+
+6. Map Transcripts to Laupala Kohalensis Genome with GMAP
+
+export PATH=/programs/gmap-2021-12-17/bin:$PATH
+
+a. Make Genome Index
+
+gmap_build -D /workdir/Hayden/gmap -d lkgenome Lakoh057scf.fa
+
+
+b. Map Transcriptomes To Genome Index
+
+#KOHALENSIS
+gmap -D /workdir/Hayden/gmap -d lkgenome -S -A -f gff3_gene --use-shared-memory=1 -t 90 lk_Trinity_cdhit98.fasta > lk_GMAP
+
+#PARANIGRA
+gmap -D /workdir/Hayden/gmap -d lkgenome -S -A -f gff3_gene --use-shared-memory=1 -t 90 lp_Trinity_cdhit98.fasta > lp_GMAP
+
+
+c. Filter Dirty 6b Outputs In R
+
+library(tidyverse)
+library(dplyr)
+
+
+###Step 1 - Clean GMAP file
+
+#KOHALENSIS
+lk_gmap<-read.delim("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GMAP", sep="\t", skip=2, header=FALSE)
+lk_gmap_filtered<-lk_gmap[lk_gmap$V3 == "gene",]
+write_tsv(lk_gmap_filtered, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GMAP_filtered")
+
+#PARANIGRA
+lp_gmap<-read.delim("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GMAP", sep="\t", skip=2, header=FALSE)
+lp_gmap_filtered<-lp_gmap[lp_gmap$V3 == "gene",]
+write_tsv(lp_gmap_filtered, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GMAP_filtered")
+
+###Step 2 - Clean and prepare filtered GMAP file along with all of the DE results files in Excel
+
+###Step 3 - Merge GMAP with Annotations
+
+#KOHALENSIS
+lk_blast<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_RecipBLASTs")
+lk_GMAP<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GMAP_filtered_cleaned.txt")
+lk_annot_GMAP<-merge(lk_blast, lk_GMAP, by="transcript", all = TRUE)
+
+write_tsv(lk_annot_GMAP, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GMAP.blastp")
+
+#PARANIGRA
+lp_blast<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_RecipBLASTs")
+lp_GMAP<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GMAP_filtered_cleaned.txt")
+lp_annot_GMAP<-merge(lp_blast, lp_GMAP, by="transcript", all = TRUE)
+
+write_tsv(lp_annot_GMAP, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GMAP.blastp")
+
+
+###Step 4 - Merge annots with GOs
+
+#KOHALENSIS
+lk_annot_GMAP<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GMAP.blastp")
+lk_GOs<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GOs.txt")
+lk_annot_GOs<-merge(lk_annot_GMAP, lk_GOs, by="sseqid", all = TRUE)
+lk_annot_GOs_all<-merge(lk_annot_GMAP, lk_annot_GOs, by="transcript", all = TRUE)
+
+
+write_tsv(lk_annot_GOs_all, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GMAP.blastp.GOs")
+
+
+#PARANIGRA
+lp_annot_GMAP<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GMAP.blastp")
+lp_GOs<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GOs.txt")
+lp_annot_GOs<-merge(lp_annot_GMAP, lp_GOs, by="sseqid", all = TRUE)
+lp_annot_GOs_all<-merge(lp_annot_GMAP, lp_annot_GOs, by="transcript", all = TRUE)
+
+
+write_tsv(lp_annot_GOs_all, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GMAP.blastp.GOs")
+
+#######################################################################################################################################################################################
+
+7. Identify All Annotations Located on QTL Scaffolds in R
+
+library(tidyverse)
+
+###Get QTL only annots
+
+#KOHALENSIS
+lk_gumpio<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lk_GMAP.blastp.GOs")
+all_QTLs<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/all_peaks-CIs_Chapter1.txt")
+QTL_annots<-merge(lk_gumpio, all_QTLs, by = "scaffold")
+
+write_tsv(QTL_annots, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/lk_QTL.annots")
+
+
+#PARANIGRA
+lp_gumpio<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/annotations/lp_GMAP.blastp.GOs")
+all_QTLs<-read_tsv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/all_peaks-CIs_Chapter1.txt")
+QTL_annots<-merge(lp_gumpio, all_QTLs, by = "scaffold")
+
+write_tsv(QTL_annots, file="C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/lp_QTL.annots")
+
+#######################################################################################################################################################################################
+
+8. Use R package TopGO to Identify Enriched GO Terms Under QTL Peaks
+
+library(topGO)
+library(Rgraphviz)
+library(tidyverse)
+
+
+# LK
+
+GOuniverse<-read_csv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lk_all_GOs.csv")
+geneID2GO<-readMappings(file = "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lk_all_GOs.csv", sep = ",", IDsep = ";")
+geneUniverse <-names(geneID2GO)
+QTLers<-read.delim("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lk_QTL_GOs.csv", sep = ",", header = TRUE)
+geneList<-factor(as.integer(geneUniverse %in% as.vector(QTLers$Entry_Name)))
+names(geneList)<-geneUniverse
+myGOdata_BP<-new("topGOdata", description= "lk", ontology = "BP", allGenes=geneList, annot = annFUN.gene2GO, gene2GO = geneID2GO, nodeSize = 10)
+myGOdata_MF<-new("topGOdata", description= "lk", ontology = "MF", allGenes=geneList, annot = annFUN.gene2GO, gene2GO = geneID2GO, nodeSize = 10) 
+myGOdata_CC<-new("topGOdata", description= "lk", ontology = "CC", allGenes=geneList, annot = annFUN.gene2GO, gene2GO = geneID2GO, nodeSize = 10) 
+resultFisher_BP <- runTest(myGOdata_BP, algorithm="weight01", statistic="fisher")
+resultFisher_MF <- runTest(myGOdata_MF, algorithm="weight01", statistic="fisher")
+resultFisher_CC <- runTest(myGOdata_CC, algorithm="weight01", statistic="fisher")
+
+allRes_BP <- GenTable(myGOdata_BP, Fisher = resultFisher_BP, topNodes=150)
+allRes_BP <- allRes_BP[which(allRes_BP$Significant > 0),]
+allRes_BP$fdr_pvalue<-p.adjust(allRes_BP$Fisher,"fdr",nrow(allRes_BP))
+allRes_MF <- GenTable(myGOdata_MF, Fisher = resultFisher_MF, topNodes=100)
+allRes_MF <- allRes_MF[which(allRes_MF$Significant > 0),]
+allRes_MF$fdr_pvalue<-p.adjust(allRes_MF$Fisher,"fdr",nrow(allRes_MF))
+allRes_CC <- GenTable(myGOdata_CC, Fisher = resultFisher_CC, topNodes=100)
+allRes_CC <- allRes_CC[which(allRes_CC$Significant > 0),]
+allRes_CC$fdr_pvalue<-p.adjust(allRes_CC$Fisher,"fdr",nrow(allRes_CC))
+
+write_tsv(allRes_MF, "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lk_MF.tsv")
+write_tsv(allRes_BP, "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lk_BP.tsv")
+write_tsv(allRes_CC, "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lk_CC.tsv")
+
+
+showSigOfNodes(myGOdata_BP, score(resultFisher_BP), firstSigNodes = 5, useInfo = 'all')
+
+# LP
+
+GOuniverse<-read_csv("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lp_all_GOs.csv")
+geneID2GO<-readMappings(file = "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lp_all_GOs.csv", sep = ",", IDsep = ";")
+geneUniverse <-names(geneID2GO)
+QTLers<-read.delim("C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lp_QTL_GOs.csv", sep = ",", header = TRUE)
+geneList<-factor(as.integer(geneUniverse %in% as.vector(QTLers$Entry_Name)))
+names(geneList)<-geneUniverse
+myGOdata_BP<-new("topGOdata", description= "lp", ontology = "BP", allGenes=geneList, annot = annFUN.gene2GO, gene2GO = geneID2GO, nodeSize = 10)
+myGOdata_MF<-new("topGOdata", description= "lp", ontology = "MF", allGenes=geneList, annot = annFUN.gene2GO, gene2GO = geneID2GO, nodeSize = 10) 
+myGOdata_CC<-new("topGOdata", description= "lp", ontology = "CC", allGenes=geneList, annot = annFUN.gene2GO, gene2GO = geneID2GO, nodeSize = 10) 
+resultFisher_BP <- runTest(myGOdata_BP, algorithm="weight01", statistic="fisher")
+resultFisher_MF <- runTest(myGOdata_MF, algorithm="weight01", statistic="fisher")
+resultFisher_CC <- runTest(myGOdata_CC, algorithm="weight01", statistic="fisher")
+
+allRes_BP <- GenTable(myGOdata_BP, Fisher = resultFisher_BP, topNodes=150)
+allRes_BP <- allRes_BP[which(allRes_BP$Significant > 0),]
+allRes_BP$fdr_pvalue<-p.adjust(allRes_BP$Fisher,"fdr",nrow(allRes_BP))
+allRes_MF <- GenTable(myGOdata_MF, Fisher = resultFisher_MF, topNodes=100)
+allRes_MF <- allRes_MF[which(allRes_MF$Significant > 0),]
+allRes_MF$fdr_pvalue<-p.adjust(allRes_MF$Fisher,"fdr",nrow(allRes_MF))
+allRes_CC <- GenTable(myGOdata_CC, Fisher = resultFisher_CC, topNodes=100)
+allRes_CC <- allRes_CC[which(allRes_CC$Significant > 0),]
+allRes_CC$fdr_pvalue<-p.adjust(allRes_CC$Fisher,"fdr",nrow(allRes_CC))
+
+write_tsv(allRes_MF, "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lp_MF.tsv")
+write_tsv(allRes_BP, "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lp_BP.tsv")
+write_tsv(allRes_CC, "C:/Users/hayde/Documents/GRAD_SKEWL/reanalysis_project/topGO/lp_CC.tsv")
+
+
+pvalFis <- score(resultFisher_BP)
+hist(pvalFis, 50, xlab = "p-values")
+
+showSigOfNodes(myGOdata_BP, score(resultFisher_BP), firstSigNodes = 5, useInfo = 'all')
+
+
+
+
+
+############################################################################################################################################
+############################################################################################################################################
+############################################################################################################################################
+############################################################################################################################################
+############################################################################################################################################
+
